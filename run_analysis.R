@@ -36,15 +36,58 @@ names(xtestrawdata) <- columnnames[,2]
 
 combinerawdata <- rbind(xtrainrawdata, xtestrawdata)
 
-subsetdata <- grep("[sS]td|[mM]ean", colnames(combinerawdata))
-
+#Subset by Mean and Standard Deviation
+subsetdata <- grep("[sS]td|-[mM]ean", colnames(combinerawdata))
 cleandata <- combinerawdata[,subsetdata]
+
+#Drop meanFreq from remaining data; Mean Frequency is a weighted average not a standard mean
+subsetdata <- grep("Freq", colnames(cleandata), invert = TRUE)
+cleandata <- cleandata[,subsetdata]
+
 
 combinetestsubjectandactivity <- cbind(testsubjects, ytestrawdata)
 combinetrainsubjectandactivity <- cbind(trainsubjects, ytrainrawdata)
 
 subjectactivity <- rbind(combinetrainsubjectandactivity, combinetestsubjectandactivity)
 colnames(subjectactivity)[1] <- "Subject"
-colnames(subjectactivity)[2] <- "Activity Type"
+colnames(subjectactivity)[2] <- "ActivityType"
+
+## Make tidy variable names
+colnames2 <- colnames(cleandata)
+colnames2 <- sub("-X", "Xaxis", colnames2)
+colnames2 <- sub("-Y", "Yaxis", colnames2)
+colnames2 <- sub("-Z", "Zaxis", colnames2)
+colnames2 <- sub("\\(\\)", "", colnames2)
+colnames2 <- sub("-mean()", "Mean", colnames2)
+colnames2 <- sub("-std", "StandardDeviation", colnames2)
+colnames2 <- sub("^f", "FrequencySignal", colnames2)
+colnames2 <- sub("^t", "TimeSignal", colnames2)
+colnames2 <- sub("Acc", "Acceleration", colnames2)
+colnames2 <- sub("Mag", "Magnitude", colnames2)
+colnames2 <- sub("Gyro", "Gyroscope", colnames2)
+
+names(cleandata) <- colnames2
 
 finalrawdata <- cbind(subjectactivity, cleandata)
+
+
+
+finalrawdata <- merge(activities, finalrawdata, by.y = "ActivityType", by.x = "V1")
+
+finalrawdata$V1 <- NULL
+colnames(finalrawdata)[2] <- "ActivityType"
+
+
+#names(finalrawdata) <- colnames2
+
+
+#Sort by Subject then by Activity Type
+sorteddata <- finalrawdata[with(finalrawdata, order(finalrawdata[,1], finalrawdata[,2])), ]
+
+
+aggregatemean <- aggregate(sorteddata[, 3:68], by = list(sorteddata$Subject, sorteddata$ActivityType), FUN = mean)
+colnames(aggregatemean)[1:2] <- c("Subject", "Activity")
+
+write.table(aggregatemean, "tidy_data.txt", row.names = FALSE)
+
+
