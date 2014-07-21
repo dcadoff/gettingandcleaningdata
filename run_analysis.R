@@ -16,6 +16,35 @@ ytestrawdata <- read.table("./test/y_test.txt")
 columnnames <- read.table("features.txt")
 activities <- read.table("activity_labels.txt")
 
+trainsubjects <- read.table("./train/subject_train.txt")
+testsubjects <- read.table("./test/subject_test.txt")
+
 ## Add column names to raw data tables
 names(xtrainrawdata) <- columnnames[,2]
 names(xtestrawdata) <- columnnames[,2]
+
+#combinetestsubjectandactivity <- cbind(testsubjects, ytestrawdata)
+#combinetrainsubjectandactivity <- cbind(trainsubjects, ytrainrawdata)
+
+#alltraindata <- cbind(combinetrainsubjectandactivity, xtrainrawdata)
+#alltestdata <- cbind(combinetestsubjectandactivity, xtestrawdata)
+
+#colnames(alltraindata)[1] <- "Subject"
+#colnames(alltraindata)[2] <- "Activity Type"
+#colnames(alltestdata)[1] <- "Subject"
+#colnames(alltestdata)[2] <- "Activity Type"
+
+combinerawdata <- rbind(xtrainrawdata, xtestrawdata)
+
+subsetdata <- grep("[sS]td|[mM]ean", colnames(combinerawdata))
+
+cleandata <- combinerawdata[,subsetdata]
+
+combinetestsubjectandactivity <- cbind(testsubjects, ytestrawdata)
+combinetrainsubjectandactivity <- cbind(trainsubjects, ytrainrawdata)
+
+subjectactivity <- rbind(combinetrainsubjectandactivity, combinetestsubjectandactivity)
+colnames(subjectactivity)[1] <- "Subject"
+colnames(subjectactivity)[2] <- "Activity Type"
+
+finalrawdata <- cbind(subjectactivity, cleandata)
