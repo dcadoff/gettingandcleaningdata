@@ -30,7 +30,7 @@
  
 ### Script Processing Step by Step:
 
-## This script does the following:
+### This script does the following:
 ####1) Merges the training and the test sets to create one data set.
 
 * Load raw data into data tables
