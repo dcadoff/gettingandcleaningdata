@@ -18,6 +18,10 @@
         columnnames <- read.table("features.txt")
         activities <- read.table("activity_labels.txt")
 
+## Tidy up activity data
+        activities$V2 <- sub("_", "", activities$V2)
+        activities$V2 <- tolower(activities$V2)
+        
 ## Load subject IDs
         trainsubjects <- read.table("./train/subject_train.txt")
         testsubjects <- read.table("./test/subject_test.txt")
@@ -83,6 +87,6 @@
         colnames(aggregatemean)[1:2] <- c("Subject", "Activity")
 
 ## Write tidy data set to text file
-        write.table(aggregatemean, "tidy_data.txt", row.names = FALSE)
+        write.table(aggregatemean, "tidydata.txt", row.names = FALSE)
 
 
