@@ -5,7 +5,7 @@
 Variable Name|Type|Description|Values / Transformations
 :---|:---|:---|:---
 subjectID|integer|Identifier of the person (subject) performing the activity|Value Range: 1 - 30
-activityName|character|Name of the activity performed by the subject|"Value Range: laying, sitting, standing, walking, walkingdownstairs, walkingupstairs"
+activityName|character|Name of the activity performed by the subject|Value Range: laying, sitting, standing, walking, walkingdownstairs, walkingupstairs
 TimeSignalBodyAccelerationMeanXaxis|numeric|Timeseries data of mean of body linear acceleration in x-axis direction|The average of all individual observations for each subjectID / activityName combination was calculated using the mean() function 
 TimeSignalBodyAccelerationMeanYaxis|numeric|Timeseries data of mean of body linear acceleration in y-axis direction|The average of all individual observations for each subjectID / activityName combination was calculated using the mean() function 
 TimeSignalBodyAccelerationMeanZaxis|numeric|Timeseries data of mean of body linear acceleration in z-axis direction|The average of all individual observations for each subjectID / activityName combination was calculated using the mean() function 
